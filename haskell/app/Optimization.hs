@@ -1,5 +1,6 @@
-{-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards #-}
+
 {- HLINT ignore "Avoid lambda using `infix`" -}
 {- HLINT ignore "Avoid lambda" -}
 {- HLINT ignore "Parenthesize unary negation" -}
@@ -7,9 +8,9 @@
 
 module Optimization where
 
+import Data.Aeson
 import qualified Data.Vector.Storable as VS
 import Numeric.LinearAlgebra
-import Data.Aeson
 
 type VectorD = Vector Double
 type MatrixD = Matrix Double

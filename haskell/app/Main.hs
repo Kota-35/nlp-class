@@ -4,8 +4,8 @@ import Data.Aeson
 import qualified Data.ByteString.Lazy.Char8 as BL
 import Numeric.LinearAlgebra
 import Optimization
-import System.Random
 import System.Directory (createDirectoryIfMissing)
+import System.Random
 
 -- 問題の定義
 data ProblemType = Interior | Exterior | AugmentedLag
@@ -59,6 +59,13 @@ main = do
     BL.writeFile "results/lagrangian_result.json" $ encode resultLagrange
     putStrLn "Saved to results/lagrangian_result.json"
 
+    -- rhoの初期値を変えて複数の結果を生成
+    putStrLn "\n=== Interior Penalty Method with Different Rho Values ==="
+    runInteriorWithDifferentRhos [1.0, 10.0, 100.0]
+
+    putStrLn "\n=== Exterior Penalty Method with Different Rho Values ==="
+    runExteriorWithDifferentRhos [0.01, 0.1, 1.0]
+
 -- 内点法の実行
 runInteriorProblem :: IO OptimizationResult
 runInteriorProblem = do
@@ -77,6 +84,30 @@ runInteriorProblem = do
 
     return result
 
+-- 異なるrho初期値で内点法を実行
+runInteriorWithDifferentRhos :: [Double] -> IO ()
+runInteriorWithDifferentRhos rhos = do
+    gen <- getStdGen
+    let dims = 1
+        config = defaultConfig
+        initialValue = vector [3 + x | x <- take dims (randoms gen :: [Double])]
+        gammaParam = 5.0
+        maxOuter = 20
+
+    putStrLn $ "Initial value: " ++ show initialValue
+
+    mapM_
+        ( \rho0 -> do
+            putStrLn $ "\n--- Rho0 = " ++ show rho0 ++ " ---"
+            let result = solveInterior config initialValue rho0 gammaParam maxOuter
+                filename = "results/interior_rho" ++ show rho0 ++ "_result.json"
+            BL.writeFile filename $ encode result
+            putStrLn $ "Solution: " ++ show (solution result)
+            putStrLn $ "Final value: " ++ show (finalValue result)
+            putStrLn $ "Saved to " ++ filename
+        )
+        rhos
+
 -- 外点法の実行
 runExteriorProblem :: IO OptimizationResult
 runExteriorProblem = do
@@ -94,6 +125,30 @@ runExteriorProblem = do
     putStrLn $ "Final value: " ++ show (finalValue result)
 
     return result
+
+-- 異なるrho初期値で外点法を実行
+runExteriorWithDifferentRhos :: [Double] -> IO ()
+runExteriorWithDifferentRhos rhos = do
+    gen <- getStdGen
+    let dims = 1
+        config = defaultConfig
+        initialValue = vector [-(3 + x) | x <- take dims (randoms gen :: [Double])]
+        gammaParam = 5.0
+        maxOuter = 20
+
+    putStrLn $ "Initial value: " ++ show initialValue
+
+    mapM_
+        ( \rho0 -> do
+            putStrLn $ "\n--- Rho0 = " ++ show rho0 ++ " ---"
+            let result = solveExterior config initialValue rho0 gammaParam maxOuter
+                filename = "results/exterior_rho" ++ show rho0 ++ "_result.json"
+            BL.writeFile filename $ encode result
+            putStrLn $ "Solution: " ++ show (solution result)
+            putStrLn $ "Final value: " ++ show (finalValue result)
+            putStrLn $ "Saved to " ++ filename
+        )
+        rhos
 
 -- 拡張ラグランジュ法の実行
 runLagrangianProblem :: IO OptimizationResult
