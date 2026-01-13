@@ -13,3 +13,41 @@ dev = [
     "ruff==0.14.11",
     "ty==0.0.10",
 ]
+
+
+[tool.ruff]
+line-length = 80
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "RET504", 
+    "E501", 
+    "INP001", 
+    "A002", 
+    "S101", 
+    "RUF006", 
+    "PLR0913", 
+    "TRY401", 
+    "FIX002", 
+    "T201", 
+    "ERA001", 
+    "S311"
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+
+[tool.ruff.lint.pylint]
+max-args = 6
+
+
+[tool.ty.rules]
+unknown-argument = "ignore"
+missing-argument = "warn"
+unresolved-import = "ignore"
+invalid-assignment = "ignore"
