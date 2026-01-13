@@ -1,0 +1,17 @@
+{
+    "folders": [
+        {
+            "name": "nlp-class",
+            "path": "."
+        },
+        {
+            "name": "haskell",
+            "path": "haskell"
+        },
+        {
+            "name": "python",
+            "path": "python"
+        }
+    ],
+
+}
