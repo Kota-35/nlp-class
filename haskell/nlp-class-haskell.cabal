@@ -73,6 +73,7 @@ executable nlp-class-haskell
                     , random
                     , bytestring
                     , vector
+                    , directory
 
     -- Directories containing source files.
     hs-source-dirs:   app

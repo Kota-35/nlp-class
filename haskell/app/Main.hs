@@ -5,6 +5,7 @@ import qualified Data.ByteString.Lazy.Char8 as BL
 import Numeric.LinearAlgebra
 import Optimization
 import System.Random
+import System.Directory (createDirectoryIfMissing)
 
 -- 問題の定義
 data ProblemType = Interior | Exterior | AugmentedLag
@@ -39,18 +40,24 @@ main = do
     -- 乱数シード設定
     setStdGen (mkStdGen 777)
 
+    -- resultsディレクトリを作成
+    createDirectoryIfMissing True "results"
+
     -- 3つの問題をすべて解く
     putStrLn "=== Interior Penalty Method ==="
     resultInterior <- runInteriorProblem
-    BL.putStrLn $ encode resultInterior
+    BL.writeFile "results/interior_result.json" $ encode resultInterior
+    putStrLn "Saved to results/interior_result.json"
 
     putStrLn "\n=== Exterior Penalty Method ==="
     resultExterior <- runExteriorProblem
-    BL.putStrLn $ encode resultExterior
+    BL.writeFile "results/exterior_result.json" $ encode resultExterior
+    putStrLn "Saved to results/exterior_result.json"
 
     putStrLn "\n=== Augmented Lagrangian Method ==="
     resultLagrange <- runLagrangianProblem
-    BL.putStrLn $ encode resultLagrange
+    BL.writeFile "results/lagrangian_result.json" $ encode resultLagrange
+    putStrLn "Saved to results/lagrangian_result.json"
 
 -- 内点法の実行
 runInteriorProblem :: IO OptimizationResult
