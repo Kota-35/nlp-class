@@ -1,0 +1,20 @@
+{
+	"python.defaultInterpreterPath": "${workspaceFolder}/.venv",
+	"[python]": {
+		"editor.codeActionsOnSave": {
+			"source.fixAll.ruff": "explicit",
+			"source.organizeImports.ruff": "explicit"
+		},
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "charliermarsh.ruff",
+		"editor.wordBasedSuggestions": "currentDocument"
+	},
+	"[yaml]": {
+		"editor.insertSpaces": true,
+		"editor.tabSize": 2,
+		"editor.autoIndent": "advanced",
+		"diffEditor.ignoreTrimWhitespace": false,
+		"editor.defaultColorDecorators": "auto",
+		"editor.indentSize": 2
+	},
+}
